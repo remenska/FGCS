@@ -1,0 +1,77 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: ElsevierFGCS_singleColumn.aux
+The style file: elsarticle-num.bst
+Database file #1: myLibrary.bib
+Warning--I'm ignoring KP:12's extra "year" field
+--line 200 of file myLibrary.bib
+Warning--I'm ignoring BP:08's extra "booktitle" field
+--line 213 of file myLibrary.bib
+Warning--entry type for "ProductionShifterGuide" isn't style-file defined
+--line 296 of file myLibrary.bib
+Warning--entry type for "gLite" isn't style-file defined
+--line 301 of file myLibrary.bib
+Warning--entry type for "LHCb" isn't style-file defined
+--line 306 of file myLibrary.bib
+Warning--entry type for "svn_mcrl2" isn't style-file defined
+--line 311 of file myLibrary.bib
+Warning--entry type for "frama_c" isn't style-file defined
+--line 316 of file myLibrary.bib
+Warning--entry type for "codeSurfer" isn't style-file defined
+--line 321 of file myLibrary.bib
+Warning--empty pages in DIRAC_CommGridSolution
+Warning--empty pages in DIRAC_ReliableDataMaangement
+Warning--empty pages in FormalLanguagemCRL2
+Warning--empty pages in SPIN_case_study
+Warning--empty pages in SLAMToolkit
+Warning--empty pages in CMS_LHC
+Warning--empty pages in Linux_driver
+Warning--empty pages in verstoep_et_al
+Warning--empty pages in Java_PathFinder
+Warning--empty pages in DIRAC_pilot_WMS
+Warning--empty pages in Musuvathi04modelchecking
+Warning--empty pages in Pelánek08fightingstate
+Warning--empty journal in Hatcliff99slicingsoftware
+Warning--empty pages in Corbett00bandera
+Warning--empty pages in KP:12
+You've used 38 entries,
+            2937 wiz_defined-function locations,
+            900 strings with 10503 characters,
+and the built_in function-call counts, 10675 in all, are:
+= -- 883
+> -- 303
+< -- 10
++ -- 126
+- -- 88
+* -- 634
+:= -- 1307
+add.period$ -- 38
+call.type$ -- 38
+change.case$ -- 38
+chr.to.int$ -- 0
+cite$ -- 53
+duplicate$ -- 428
+empty$ -- 1460
+format.name$ -- 114
+if$ -- 2916
+int.to.chr$ -- 0
+int.to.str$ -- 38
+missing$ -- 33
+newline$ -- 128
+num.names$ -- 34
+pop$ -- 372
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 774
+stack$ -- 0
+substring$ -- 347
+swap$ -- 75
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 15
+while$ -- 63
+width$ -- 40
+write$ -- 309
+(There were 23 warnings)
