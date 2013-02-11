@@ -1086,7 +1086,7 @@ as such do not scale well.
 
 To overcome the problem of state space explosion, several
 variants to explicit model checking have gained popularity. Runtime
-verification~\cite{citeulike:10198274,Havelund:2008:RVC:1424465.1424470}
+verification~\cite{DBLP:conf/dagstuhl/ColinM04,Havelund:2008:RVC:1424465.1424470}
 aims to increase confidence in the correctness, but does not make claims for
 absence of defects in a system.
 The target program is instrumented manually, or automatically by scanning
@@ -1135,8 +1135,8 @@ graphic formalism variants of the classical finite-state machines. Given that th
 analysis of program execution traces is still the most prevalent debugging technique
 for distributed systems, and DIRAC's components (as well as the middleware) produce
 immense amounts of execution logs anyhow, it seems like an attractive approach to constructing models.
-There is a vast amount of work in this area~\cite{Aalst:1997:VWN:647744.733919,Lou:2010:MPW:1835804.1835883,Walkinshaw:2008:IFM:1642931.1642962,vanderAalst:2004:WMD:1018031.1018329,Ammons:2002:MS:503272.503275,Kumar:2011:SMC:1985793.1986002}.
-A common assumption in process mining is that each trace is totally ordered, 
+There is a vast amount of work in this area~\cite{Aalst:1997:VWN:647744.733919,Lou:2010:MPW:1835804.1835883,Walkinshaw:2008:IFM:1642931.1642962,vanderAalst:2004:WMD:1018031.1018329,Ammons:2002:MS:503272.503275}.
+A common assumption in process mining is that the events in each trace are totally ordered, 
 which for concurrent systems does not always hold. To cope with this, most approaches 
 require that the thread IDs or process IDs are recorded in the traces as well.
 Observing this as a realistic obstacle for obtaining an accurate model, Lou et al. in~\cite{Lou:2010:MPW:1835804.1835883}
@@ -1144,7 +1144,7 @@ propose an algorithm for constructing models from traces of concurrent systems b
 Their algorithm identifies dependency relationships between pairs of events in interleaved
 traces. Another common assumption is a direct result of the underlying techniques used for constructing the models, namely data mining 
 and machine learning. These techniques consider ``erroneous activities'' or activities that
-were not logged for some reason, as noise, and disregard trace sequences with no statistical significance.
+were not logged in the appropriate order for some reason, as noise, and disregard trace sequences with no statistical significance.
 As a result, a design flaw can be mistaken for a noise, or not captured at all if a particular 
 execution path has a low probability of occurrence. A notable exception in this direction is~\cite{vanderAalst:2005:PMV:2099016.2099032}, where the emphasis is not only on process discovery,
 but also on verification: desired or undesired properties can be expressed with Linear Temporal Logic, 
