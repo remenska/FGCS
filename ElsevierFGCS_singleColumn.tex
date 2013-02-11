@@ -1084,30 +1084,76 @@ relying on the the MPI extension of the popular model checker SPIN~\cite{Siegel:
 Ironically enough, the model checking tools themselves do not take advantage of distributed infrastructures, and 
 as such do not scale well. 
 
-To overcome the fundamental problem of state space explosion, several
-variants to explicit model checking have gained popularity. Runtime verification~\cite{citeulike:10198274,Havelund:2008:RVC:1424465.1424470}
-aims to increase confidence in the correctness, but does not make claims for absence of defects in a system.
-The target program is instrumented manually, or automatically by scanning function calls and variable assignments, 
-in order to capture and emit relevant events which are then monitored against a special component during execution.
-This component resembles our monitoring process automaton used to cope with state space explosion during model checking 
-of DIRAC's WMS system. While runtime verification is useful for partially-capturing incorrect behavior of the system implementation, 
-code instrumentation is not always a feasible option, considering the increase of memory consumption. 
-Similar to this lightweight form of verification is static program analysis~\cite{Schmidt98programanalysis}. Rather than code instrumentation and execution,
-static program analysis aims to determine runtime properties of systems at compilation time.
-A special analyzer targeted for the implementation language maintains information on the control flow and function call graphs
-of the software. Approximation is used by such tools in practice, in order to improve scalability. The obvious advantage
-of this approach is that it works directly on the implementation. However, most static analysis tools aim at discovering 
-more general implementation deficiencies, such as uninitialized variables, null pointer references, or out of bound array indices. 
+To overcome the problem of state space explosion, several
+variants to explicit model checking have gained popularity. Runtime
+verification~\cite{citeulike:10198274,Havelund:2008:RVC:1424465.1424470}
+aims to increase confidence in the correctness, but does not make claims for
+absence of defects in a system.
+The target program is instrumented manually, or automatically by scanning
+function calls and variable assignments, 
+in order to capture and emit relevant events which are then monitored against a
+special component during execution.
+This component resembles our monitoring process automaton used to cope with
+state space explosion during model checking 
+of DIRAC's WMS system. While runtime verification is useful for
+partially-capturing incorrect behavior of the system implementation, 
+code instrumentation is not always a feasible option, considering the increase
+of memory consumption. 
+
+Similar to this lightweight form of verification is static program
+analysis~\cite{Schmidt98programanalysis}. Rather than code instrumentation and
+execution, the objective of 
+static program analysis is to determine runtime properties of systems at
+compilation time.
+A special analyzer targeted for the implementation language maintains
+information on the control flow and function call graphs
+of the software. Approximation is used by such tools in practice, in order to
+improve scalability. The obvious advantage
+of this approach is that it works directly on the implementation. However, most
+static analysis tools aim at discovering 
+more general implementation deficiencies, such as uninitialized variables, null
+pointer references, or out of bound array indices. An additional drawback
+is their 
+practical availability for languages other than C and Java. To the best of our
+knowledge, no such tool exists for Python.
 Both runtime verification and static analysis can be seen as additions to
 traditional model checking, rather than alternatives. Some progress has been 
-made in the direction of combining the approaches~\cite{Java_PathFinder,Linux_driver,Brat01combiningstatic}. For instance, Java PathFinder~\cite{Java_PathFinder}
-relies on static analysis to reduce the state space before systematically exploring it by executing the abstracted program. In~\cite{Brat01combiningstatic}
-static analysis and model checking also operate in a feedback loop. The drawback of static analyzers is their 
-practical availability for languages other than C and Java. To the best of our knowledge, no such tool exists for Python.
-However, our approach of using code slicing to abstract the implementation shares similarities.
+made in the direction of combining the
+approaches~\cite{Java_PathFinder,Linux_driver,Brat01combiningstatic}. For
+instance, Java PathFinder~\cite{Java_PathFinder}
+relies on static analysis to reduce the state space before systematically
+exploring it by executing the abstracted program.
+In~\cite{Brat01combiningstatic}
+static analysis and model checking also operate in a feedback loop. 
 
-TODO: trace mining
+Instead of constructing a model of the system from scratch, when the only 
+source of documentation is the code itself, a technique called process (or workflow) mining~\cite{Agrawal:1998:MPM:645338.650397}
+can be used. It is a method of automatically distilling a process or software specification from a set of 
+structured traces collected from real system executions.
+The mined specifications are typically expressed in a form of Message Sequence Graphs or Petri-Nets, 
+graphic formalism variants of the classical finite-state machines. Given that the 
+analysis of program execution traces is still the most prevalent debugging technique
+for distributed systems, and DIRAC's components (as well as the middleware) produce
+immense amounts of execution logs anyhow, it seems like an attractive approach to constructing models.
+There is a vast amount of work in this area~\cite{Aalst:1997:VWN:647744.733919,Lou:2010:MPW:1835804.1835883,Walkinshaw:2008:IFM:1642931.1642962,vanderAalst:2004:WMD:1018031.1018329,Ammons:2002:MS:503272.503275,Kumar:2011:SMC:1985793.1986002}.
+A common assumption in process mining is that each trace is totally ordered, 
+which for concurrent systems does not always hold. To cope with this, most approaches 
+require that the thread IDs or process IDs are recorded in the traces as well.
+Observing this as a realistic obstacle for obtaining an accurate model, Lou et al. in~\cite{Lou:2010:MPW:1835804.1835883}
+propose an algorithm for constructing models from traces of concurrent systems by expressing events as partially ordered.
+Their algorithm identifies dependency relationships between pairs of events in interleaved
+traces. Another common assumption is a direct result of the underlying techniques used for constructing the models, namely data mining 
+and machine learning. These techniques consider ``erroneous activities'' or activities that
+were not logged for some reason, as noise, and disregard trace sequences with no statistical significance.
+As a result, a design flaw can be mistaken for a noise, or not captured at all if a particular 
+execution path has a low probability of occurrence. A notable exception in this direction is~\cite{vanderAalst:2005:PMV:2099016.2099032}, where the emphasis is not only on process discovery,
+but also on verification: desired or undesired properties can be expressed with Linear Temporal Logic, 
+and the checker verifies whether the observed behavior in the traces matches the property.
 
+While relying solely on process mining as a technique for extracting a formal model may not be 
+the way to go, inferring a ``fuzzy'' model from the frequent interaction traces, rather than manual code analysis
+could be a helpful initial step. Nevertheless, the graphical models obtained must be 
+translated into a process algebra formalism accepted by an actual toolset, if system correctness is to be established.
 \section{Conclusions}
 \label{sec:Section_5}
 In this paper we have applied a formal methods approach for analyzing CERN's 
