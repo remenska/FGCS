@@ -176,8 +176,8 @@ the grid storage, several steps of data processing, up to the final user
 analysis. 
 It provides a concurrent use of over 60K CPUs and 10M file replicas distributed over
 tens of grid sites, provided by the WLCG computing grid \cite{Bird:2011zz}. The community of users has grown to several hundreds, loading the 
-LHC grid resources with up to 30K simultaneously running jobs (Fig.~\ref{fig:LHCb-resource-usage}, top) and over 100000 jobs executed per day, during peak processing periods.
-About 10PB of data is stored and visible in the LHCb file catalogs, with daily data transfers among storage units reaching 3Gbps (Fig.~\ref{fig:LHCb-resource-usage}, bottom).
+LHC grid resources with up to 30K simultaneously running jobs (Fig.~\ref{fig:LHCb-resource-usage}, top) and over 100K jobs executed per day, during peak processing periods.
+About 10PB of data is stored and visible in the LHCb file catalogs, with daily data transfers between storage units reaching 3Gbps (Fig.~\ref{fig:LHCb-resource-usage}, bottom).
 \begin{figure*}[tp!]
   \centering
   {\label{fig:Job-throughput}\includegraphics[width=0.7\linewidth]{./graphics/Figure1_1.png}}    
@@ -325,13 +325,24 @@ general information about every job requesting a service from the SMS. The
 details about every file (i.e., the Storage Element where it resides, the
 size, checksum, number of tasks that requested it), are kept in the \textit{CacheReplicas}
 table. Other auxiliary tables maintain the relationship between these entities.
-\begin{figure}[tp]
-\begin{center}
- \includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure4.png}
-\end{center}
-\caption{DIRAC Storage Management System}
-\label{fig:DIRAC-SMS}
+
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.98\linewidth]{./graphics/Figure4.png}
+  \caption{DIRAC Storage Management System}
+  \label{fig:DIRAC-SMS}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.95\linewidth]{./graphics/SMS_CacheReplicasSM.png}
+  \caption{CacheReplicas state machine}
+  \label{fig:CacheReplicas-SM}
+\end{minipage}
 \end{figure}
+
 The processing begins with the \textit{Request Preparation Agent}. It selects all the
 ``New'' replica entries, checks whether they are registered in a Logical
 File Catalog (LFC), and retrieves their metadata. In case of problematic catalog
@@ -354,7 +365,8 @@ in the chain is the \textit{Request Finalization Agent}. The \textit{Tasks} whic
 final states (``Staged'' or ``Failed'') are cleared from the database, and callbacks
 are performed to the WMS, which effectively wakes up the corresponding jobs. If
 there are no more associated \textit{Tasks} for particular replicas, the respective
-\textit{CacheReplicas} entries are also removed.
+\textit{CacheReplicas} entries are also removed. The state machine of the \textit{CacheReplicas}
+entity is shown in Fig.~\ref{fig:CacheReplicas-SM}.
 
 This subsystem is still in an evolutionary phase. In multiple instances, tasks or
 replicas have become “stuck”, effectively blocking the progress of jobs. Tracing
@@ -1049,6 +1061,52 @@ they place on the storage, in addition to eliminating race conditions.
 \caption{ Race condition involving the stager callback no longer occurs}
 \label{fig:zombieJobFix}
 \end{figure}%123478
+  
+\section{Related Work}
+\label{sec:RelatedWork}
+Model checking belongs to a class of mathematically-based techniques for specification, analysis,
+and verification of software and hardware systems. Theorem proving, static checking, run-time verification, and model-based testing
+also belong to this category of formal methods. The main premise behind their use is the expectation that
+the initial investment in becoming proficient and developing models pays off in the long run, in terms 
+of improved reliability and safety of the system. While traditional testing is almost
+exclusively used as a verification methodology in many practical industrial cases,
+formal methods have started receiving more attention in the last couple of decades. 
+Testing is often based on the intuition and experience of the tester, and, as such, does not 
+always reveal subtle system errors. Hence, particular efforts are directed at
+the practical use of formal methods in the area of critical, concurrent, and distributed 
+systems.
+The application of such methods in communication protocols~\cite{SPIN_case_study,SlidingWindowProtocol,sessionMgmtMasterThesis}, 
+safety-critical software~\cite{Java_PathFinder,CMS_LHC,Mathijssen:2006:VDA:1757571.1757584},
+driver design~\cite{Ball04slamand,Linux_driver}, among others, has been a success.
+Case studies in the domain of high-performance computing, and in particular concurrent/MPI-based program design,
+have surfaced as well~\cite{Siegel04verificationof,Matlin:2002:SPS:645881.672236,Siegel:2007:MCN:1763048.1763053}, mostly 
+relying on the the MPI extension of the popular model checker SPIN~\cite{Siegel:2007:VPP:2396095.2396105}.
+Ironically enough, the model checking tools themselves do not take advantage of distributed infrastructures, and 
+as such do not scale well. 
+
+To overcome the fundamental problem of state space explosion, several
+variants to explicit model checking have gained popularity. Runtime verification~\cite{citeulike:10198274,Havelund:2008:RVC:1424465.1424470}
+aims to increase confidence in the correctness, but does not make claims for absence of defects in a system.
+The target program is instrumented manually, or automatically by scanning function calls and variable assignments, 
+in order to capture and emit relevant events which are then monitored against a special component during execution.
+This component resembles our monitoring process automaton used to cope with state space explosion during model checking 
+of DIRAC's WMS system. While runtime verification is useful for partially-capturing incorrect behavior of the system implementation, 
+code instrumentation is not always a feasible option, considering the increase of memory consumption. 
+Similar to this lightweight form of verification is static program analysis~\cite{Schmidt98programanalysis}. Rather than code instrumentation and execution,
+static program analysis aims to determine runtime properties of systems at compilation time.
+A special analyzer targeted for the implementation language maintains information on the control flow and function call graphs
+of the software. Approximation is used by such tools in practice, in order to improve scalability. The obvious advantage
+of this approach is that it works directly on the implementation. However, most static analysis tools aim at discovering 
+more general implementation deficiencies, such as uninitialized variables, null pointer references, or out of bound array indices. 
+Both runtime verification and static analysis can be seen as additions to
+traditional model checking, rather than alternatives. Some progress has been 
+made in the direction of combining the approaches~\cite{Java_PathFinder,Linux_driver,Brat01combiningstatic}. For instance, Java PathFinder~\cite{Java_PathFinder}
+relies on static analysis to reduce the state space before systematically exploring it by executing the abstracted program. In~\cite{Brat01combiningstatic}
+static analysis and model checking also operate in a feedback loop. The drawback of static analyzers is their 
+practical availability for languages other than C and Java. To the best of our knowledge, no such tool exists for Python.
+However, our approach of using code slicing to abstract the implementation shares similarities.
+
+TODO: trace mining
 
 \section{Conclusions}
 \label{sec:Section_5}
