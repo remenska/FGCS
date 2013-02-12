@@ -1115,8 +1115,7 @@ more general implementation deficiencies, such as uninitialized variables, null
 pointer references, or out of bound array indices. An additional drawback
 is their 
 practical availability for languages other than C and Java. To the best of our
-knowledge, no such tool exists for Python.
-Both runtime verification and static analysis can be seen as additions to
+knowledge, no such tool exists for Python. Both runtime verification and static analysis can be seen as additions to
 traditional model checking, rather than alternatives. Some progress has been 
 made in the direction of combining the
 approaches~\cite{Java_PathFinder,Linux_driver,Brat01combiningstatic}. For
@@ -1125,6 +1124,19 @@ relies on static analysis to reduce the state space before systematically
 exploring it by executing the abstracted program.
 In~\cite{Brat01combiningstatic}
 static analysis and model checking also operate in a feedback loop. 
+
+Static analysis is, in a sense, an extreme form of automated deductive
+verification.  In its original form, deductive verification technology
+allowed for the use of logics such as Floyd-Hoare logic~\cite{Hoa:69} for
+showing the correctness of a software or hardware system by constructing
+proofs thereof, based on mathematical descriptions of the behavior of
+the system.  These days, the proofs involved are often discharged using a
+mechanical or an automated theorem prover. Moreover, more advanced logics
+such as Separation Logic~\cite{Rey:02} are used. Deductive verification
+is applied quite successfully on software code~\cite{PMSJP:12,KAE+:10}
+and hardware~\cite{AATH:10}, but the effort required for conducting the
+verification can be prohibiting, and can compare poorly to model checking.
+
 
 Instead of constructing a model of the system from scratch, when the only 
 source of documentation is the code itself, a technique called process (or workflow) mining~\cite{Agrawal:1998:MPM:645338.650397}
