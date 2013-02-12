@@ -104,6 +104,12 @@ behaviors becomes a formidable mission due to multiple factors: the inherent
 parallelism present among the system components deployed on different physical
 machines, the size of the implementation ($\sim$150,000 lines of Python code),
 and the distributed knowledge of different subsystems within the collaboration.
+Depending on the frequency of certain heavier data (re)processing campaigns throughout 
+the year, the occurrence of such inconsistencies can be up to several reported cases 
+per month. However, since they have a blocking effect on these heavy grid activities
+with a strict deadline, locating and fixing the root cause of such a problem 
+typically has a lower priority within the collaboration, compared to a temporary fix, 
+such as manipulating database records or restarting processes manually.
 
 In this paper we propose the use of rigorous (formal) methods for improving
 software quality. Model checking \cite{ProcessesWithData} is one such technique for analysis of an
@@ -121,7 +127,19 @@ insight into the system behavior and incrementally improve the model.
 Already using these techniques, critical race conditions and livelocks were detected and confirmed to
 occur in the real system. Some of them were a result of simple coding bugs;
 others unveiled more elementary design problems. We further formulated,
-formalized and verified several application-specific properties.
+formalized and verified several application-specific properties. Once
+the model is in place, the toolset can automatically check for general system
+properties, such as deadlocks. We show how to formulate and check
+application-specific
+properties with the toolset. Furthermore, we outline a methodology to
+effectively tackle the classical state space explosion
+problem arising when the underlying model grows beyond the resources available
+to perform explicit model checking. For this, we borrow 
+concepts from finite state machine formalisms for description of system properties.
+Extending the specification with a so-called monitoring automaton for tracking 
+relevant transitions in the original model, can speed up the
+analysis and discovery of traces that lead to violation of a certain property.
+This idea is simple but flexible and generic enough to describe many temporal properties of concurrent programs.
 
 The idea of modeling existing systems using 
 formal techniques is as such not new. Earlier studies
@@ -159,7 +177,8 @@ The paper is organized as follows. Section 2 introduces the architecture
 of DIRAC, focusing on the two subsystems chosen as case studies. Section 3 gives a brief
 overview of the mCRL2 language, and describes our approach to abstracting
 and modeling the behavior of these subsystems. Section 4 presents the
-analysis with the mCRL2 toolset and the issues detected. Section 5 and 6
+analysis with the mCRL2 toolset and the issues detected. Work related to the 
+domain of distributed systems verification is discussed in Section 5. Section 6 and 7
 conclude and give directions for future work, respectively. 
 
 \section{DIRAC: A Community Grid Solution}
@@ -174,11 +193,17 @@ that can be reused by other communities besides LHCb. Today, it covers all major
 LHCb tasks starting with the raw data transfer from the experiment's detector to
 the grid storage, several steps of data processing, up to the final user
 analysis. 
-It provides a concurrent use of over 60K CPUs and 10M file replicas distributed over
-tens of grid sites, provided by the WLCG computing grid \cite{Bird:2011zz}. The community of users has grown to several hundreds, loading the 
-LHC grid resources with up to 30K simultaneously running jobs (Fig.~\ref{fig:LHCb-resource-usage}, top) and over 100K jobs executed per day, during peak processing periods.
-About 10PB of data is stored and visible in the LHCb file catalogs, with daily data transfers between storage units reaching 3Gbps (Fig.~\ref{fig:LHCb-resource-usage}, bottom).
-\begin{figure*}[tp!]
+It provides a concurrent use of over 60K CPUs and 10M file replicas distributed
+over
+tens of grid sites, provided by the WLCG computing grid \cite{Bird:2011zz}. The
+community of users has grown to several hundreds, loading the 
+LHC grid resources with up to 30K simultaneously running jobs
+(Fig.~\ref{fig:LHCb-resource-usage}, top) and over 100K jobs executed per day,
+during peak processing periods.
+About 10PB of data is stored and visible in the LHCb file catalogs, with daily
+data transfers between storage units reaching 3Gbps
+(Fig.~\ref{fig:LHCb-resource-usage}, bottom).
+\begin{figure*}
   \centering
   {\label{fig:Job-throughput}\includegraphics[width=0.7\linewidth]{./graphics/Figure1_1.png}}    
   \vfill
@@ -377,7 +402,7 @@ scratch. Occasionally, error messages are reported from unsuccessful attempts of
 the SMS service to update the state of non-existent table entries.
 
 \section{System modeling}
-
+\label{section3}
 \subsection{The mCRL2 language and toolset}
 
 Distributed systems, such as the DIRAC system, are commonly modeled
@@ -1111,11 +1136,19 @@ of the software. Approximation is used by such tools in practice, in order to
 improve scalability. The obvious advantage
 of this approach is that it works directly on the implementation. However, most
 static analysis tools aim at discovering 
-more general implementation deficiencies, such as uninitialized variables, null
-pointer references, or out of bound array indices. An additional drawback
+more general and low-level implementation bugs, such as uninitialized variables, null
+pointer references, zero division, or out of bound array indices. 
+It is almost impossible for a general static analysis tool to
+figure out the exact high-level intent of the implementation code taken as input.
+Because of the heavy
+approximation they use,
+static analysis tools are quite fast and applicable to large software projects,
+but result in many false positives reported. 
+An additional drawback
 is their 
 practical availability for languages other than C and Java. To the best of our
-knowledge, no such tool exists for Python. Both runtime verification and static analysis can be seen as additions to
+knowledge, no such tool exists for Python. Both runtime verification and static
+analysis can be seen as additions to
 traditional model checking, rather than alternatives. Some progress has been 
 made in the direction of combining the
 approaches~\cite{Java_PathFinder,Linux_driver,Brat01combiningstatic}. For
@@ -1188,10 +1221,19 @@ traditional testing techniques for large-scale distributed systems.
 The investment in writing an abstract model in a formal language 
 pays off proportionally to the size (number of components) of the distributed system. 
 This holds especially for grid systems where a large number of concurrent
- components of the same kind deliver the overall system functionality. 
-Once becoming proficient with
+components of the same kind deliver the overall system functionality. 
+It is observed that many large concurrent/distributed systems are essentially
+parametrized, meaning that they contain components or process descriptions
+which are behaviorally similar. Once becoming proficient with
 the formal language notation, modeling such components is
-reduced to reapplying similar abstraction rules.
+reduced to reapplying similar abstraction rules. The methodology we have outlined is particularly
+suitable for such systems. In addition, the guidelines proposed can be applied
+when dealing with data-centered concurrent systems, where the only documentation
+is the implementation itself, and most of the problems arise from sharing data among 
+processes. The biggest challenge for such systems is finding a reasonable abstraction
+level for the formal model, and we believe that the combination of code slicing and
+abstraction rules of thumb presented in Section 3 can be helpful in this direction. 
+
 Practitioners
 of model checking have already built sufficiently mature tools
 that can be utilized (almost) as blackboxes by more traditional
