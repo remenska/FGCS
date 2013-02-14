@@ -109,7 +109,7 @@ the year, the occurrence of such inconsistencies can be up to several reported c
 per month. However, since they have a blocking effect on these heavy grid activities
 with a strict deadline, locating and fixing the root cause of such a problem 
 typically has a lower priority within the collaboration, compared to a temporary fix, 
-such as manipulating database records or restarting processes manually.
+like manipulating database records or restarting processes manually.
 
 In this paper we propose the use of rigorous (formal) methods for improving
 software quality. Model checking \cite{ProcessesWithData} is one such technique for analysis of an
@@ -135,11 +135,11 @@ properties with the toolset. Furthermore, we outline a methodology to
 effectively tackle the classical state space explosion
 problem arising when the underlying model grows beyond the resources available
 to perform explicit model checking. For this, we borrow 
-concepts from finite state machine formalisms for description of system properties.
+concepts from finite state machine formalisms for description of the system properties.
 Extending the specification with a so-called monitoring automaton for tracking 
 relevant transitions in the original model, can speed up the
 analysis and discovery of traces that lead to violation of a certain property.
-This idea is simple but flexible and generic enough to describe many temporal properties of concurrent programs.
+This idea is simple but flexible and generic enough to describe many temporal properties of concurrent systems.
 
 The idea of modeling existing systems using 
 formal techniques is as such not new. Earlier studies
@@ -185,6 +185,18 @@ conclude and give directions for future work, respectively.
 \label{sec:Section_2}
 \subsection{Architecture Overview}
 
+\begin{figure}[tp!]
+\includegraphics[width=0.7\textwidth]{./graphics/Figure1_1.png}
+\centering
+\caption{LHCb job troughput by site}
+\label{fig:Job-throughput}
+\end{figure}
+\begin{figure}[tp!]
+\includegraphics[width=0.7\textwidth]{./graphics/Figure1_2.png}
+\centering
+\caption{LHCb data transfers throughput}
+\label{fig:Data-transfers}
+\end{figure}
 The development of DIRAC started in 2002 as a system for production of simulation
 data that would serve to verify physics theory, aspects of the LHCb detector design, as
 well as to optimize physics algorithms. It gradually evolved into a complete community
@@ -198,32 +210,17 @@ over
 tens of grid sites, provided by the WLCG computing grid \cite{Bird:2011zz}. The
 community of users has grown to several hundreds, loading the 
 LHC grid resources with up to 30K simultaneously running jobs
-(Fig.~\ref{fig:LHCb-resource-usage}, top) and over 100K jobs executed per day,
+(Fig.~\ref{fig:Job-throughput}) and over 100K jobs executed per day,
 during peak processing periods.
 About 10PB of data is stored and visible in the LHCb file catalogs, with daily
 data transfers between storage units reaching 3Gbps
-(Fig.~\ref{fig:LHCb-resource-usage}, bottom).
-\begin{figure*}
-  \centering
-  {\label{fig:Job-throughput}\includegraphics[width=0.7\linewidth]{./graphics/Figure1_1.png}}    
-  \vfill
-  \vspace{14pt}
-{\label{fig:Data-transfers}\includegraphics[width =0.7\linewidth]{./graphics/Figure1_2.png}}
-  \caption{LHCb resource usage}
-  \label{fig:LHCb-resource-usage}
-\end{figure*}
+(Fig.~\ref{fig:Data-transfers}).
+
 Python was chosen as the implementation language, since it enables
 rapid prototyping and development of new features. DIRAC follows the Service
 Oriented Architecture (SOA) paradigm, accompanied by a network of lightweight
 distributed agents which animate the system. Its main components are depicted in
 Fig.~\ref{fig:DIRAC-Arch}. 
-
-\begin{figure}[tp]
-\includegraphics[width=0.5\textwidth] {./graphics/Figure1.png}
-\centering
-\caption{DIRAC Architecture overview}
-\label{fig:DIRAC-Arch}
-\end{figure}
 
 The \textit{services} are passive components that react to requests from their clients,
 possibly soliciting other services in order to fulfill the requests. They run as
@@ -241,7 +238,12 @@ agents repeat the same logic in each iteration cycle: they monitor the service s
  and respond by initiating actions (like job
 submission or data transfer) which update the states of various system
 entities.
-
+\begin{figure}[tp!]
+\includegraphics[width=0.5\textwidth] {./graphics/Figure1.png}
+\centering
+\caption{DIRAC Architecture overview}
+\label{fig:DIRAC-Arch}
+\end{figure}
 \textit{Resources} are software abstractions of the underlying heterogeneous grid
 computing and storage entities allocated to LHCb, providing a uniform interface
 for access. The physical resources are controlled by the site managers and made
@@ -368,7 +370,7 @@ table. Other auxiliary tables maintain the relationship between these entities.
 \end{minipage}
 \end{figure}
 
-The processing begins with the \textit{Request Preparation Agent}. It selects all the
+Fig.~\ref{fig:CacheReplicas-SM} depicts the state machine of the CacheReplicas entitiy. The processing begins with the \textit{Request Preparation Agent}. It selects all the
 ``New'' replica entries, checks whether they are registered in a Logical
 File Catalog (LFC), and retrieves their metadata. In case of problematic catalog
 entries, it can update the state of the \textit{CacheReplicas} and the related \textit{Tasks}
@@ -568,6 +570,7 @@ Two lists of replica IDs are built before the last step: one for the problematic
 and one for the successful sanity checks.
 Finally, the last two highlighted code segments update the states 
 of the corresponding CacheReplicas to "Failed'' and ``Waiting'' respectively.
+
 \definecolor{light-gray}{gray}{0.90}
 \lstset{language=Python,tabsize=2,caption={\textit{RequestPreparationAgent.py} code excerpt},
   stringstyle=\ttfamily,
@@ -810,6 +813,15 @@ since the state space typically grows exponentially with the number of parallel 
 \label{mcrl2Stats}
 \end{table}
 \subsection{Simulation and debugging}
+\begin{figure*}[tp!]
+  \centering
+  \subfloat[Logging info of a DIRAC job]{\label{fig:Job-Logging-Info}\includegraphics[width=0.4566\linewidth]{./graphics/Figure6a.png}}    
+  \hfill
+  \subfloat[XSim simulator trace]{\label{fig:simulator}\includegraphics[width =0.5\linewidth]{./graphics/Figure6b.png}}
+  \caption{Invalid job state transitions}
+  \label{fig:Simulator-job-trace}
+\vspace{-8 pt}
+\end{figure*}
 Apart from verification, the mCRL2 toolset has a rich set of tools for analysis of the modeled system. 
 The XSim simulator allows to replay scenarios and inspect in 
 detail the current state and all possible transitions in the model, for every execution step. 
@@ -821,15 +833,6 @@ in the requirements. We want to stress that this is especially useful
 when building models of existing implementations, where at first glance it 
 is not very clear which (un)desired properties need to be formulated and automatically probed,
 before they actually surface in the real system.
-\begin{figure*}[bp!]
-  \centering
-  \subfloat[Logging info of a DIRAC job]{\label{fig:Job-Logging-Info}\includegraphics[width=0.4566\linewidth]{./graphics/Figure6a.png}}    
-  \hfill
-  \subfloat[XSim simulator trace]{\label{fig:simulator}\includegraphics[width =0.5\linewidth]{./graphics/Figure6b.png}}
-  \caption{Invalid job state transitions}
-  \label{fig:Simulator-job-trace}
-\vspace{-8 pt}
-\end{figure*}
 One such problematic behavior was recently reported in DIRAC's production (Fig.~\ref{fig:Job-Logging-Info}), where
 a job had transited between two different terminating states, ``Failed'' and ``Done''.
 Replaying the behavior with XSim revealed the exact same trace in the WMS model (Fig.~\ref{fig:simulator}).
@@ -848,6 +851,11 @@ because it is naturally expected that this process has exclusive control
 over the rest of the job workflow, once it starts running. Fixing such
 a problem without compromising efficiency is not trivial.
 \subsection{Visualization}
+Reasonably small LTSs can be easily visualized with the interactive GUI tools,
+as the tools employ smart clustering techniques to reduce the complexity of the image.
+For instance, the SMS model, with around 18000 states,
+was visualized with DiaGraphica. Fig.~\ref{fig:DiaGraphica} shows a projection (clustering) of the state space
+on the CacheReplicas memory process, which resulted in only 6 interesting states for this process alone.
 \begin{figure}[tp]
 \vspace{-10 pt}
 \includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure7_new.png}
@@ -855,12 +863,6 @@ a problem without compromising efficiency is not trivial.
 \caption{CacheReplicaMem process visualization with DiaGraphica}
 \label{fig:DiaGraphica}
 \end{figure}%123478
-Reasonably small LTSs can be easily visualized with the interactive GUI tools,
-as the tools employ smart clustering techniques to reduce the complexity of the image.
-For instance, the SMS model, with around 18000 states,
-was visualized with DiaGraphica. Fig.~\ref{fig:DiaGraphica} shows a projection (clustering) of the state space
-on the CacheReplicas memory process, which resulted in only 6 interesting states for this process alone.
-
 The clustering
 allowed us to see precisely which chain of actions by the concurrent agents
 advanced the state of the CacheReplicas entity. In fact, in the modeling phase we discovered the first problematic
@@ -874,7 +876,7 @@ Such tasks would never be picked up by SMS and called-back to the appropriate jo
 since the agent responsible for this final step would only look for ``Staged'' tasks.
 A proper state machine implementation
 instead of hardcoding states in SQL queries can prevent such bugs.
-\begin{figure}[bp!]
+\begin{figure}[tp!]
 \vspace{-10 pt}
 \includegraphics[width=0.57\linewidth,keepaspectratio=true]{./graphics/Figure8.png}
 \centering
@@ -1116,12 +1118,12 @@ aims to increase confidence in the correctness, but does not make claims for
 absence of defects in a system.
 The target program is instrumented manually, or automatically by scanning
 function calls and variable assignments, 
-in order to capture and emit relevant events which are then monitored against a
+in order to capture and emit relevant events which are then monitored by a
 special component during execution.
 This component resembles our monitoring process automaton used to cope with
 state space explosion during model checking 
 of DIRAC's WMS system. While runtime verification is useful for
-partially-capturing incorrect behavior of the system implementation, 
+capturing incorrect behavior of the system implementation, 
 code instrumentation is not always a feasible option, considering the increase
 of memory consumption. 
 
@@ -1166,7 +1168,7 @@ proofs thereof, based on mathematical descriptions of the behavior of
 the system.  These days, the proofs involved are often discharged using a
 mechanical or an automated theorem prover. Moreover, more advanced logics
 such as Separation Logic~\cite{Rey:02} are used. Deductive verification
-is applied quite successfully on software code~\cite{PMSJP:12,KAE+:10}
+is applied quite successfully on software~\cite{PMSJP:12,KAE+:10}
 and hardware~\cite{AATH:10}, but the effort required for conducting the
 verification can be prohibiting, and can compare poorly to model checking.
 
@@ -1244,7 +1246,7 @@ an abstract model can be easily
 applied to other large-scale industrial systems of a similar nature.
 It goes without saying that the analyst must be careful to faithfully
 describe the system behavior in the abstract model. With this critical step in mind, formal methods
-are an important addition to the assembly of software analysis and verification techniques for concurrent distributed systems.
+are an important addition to the assembly of software analysis and verification techniques for concurrent systems.
 \section{Future work}
 \label{sec:Section_6}
 Besides discovering behavioral problems, the 
