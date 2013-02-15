@@ -185,14 +185,14 @@ conclude and give directions for future work, respectively.
 \label{sec:Section_2}
 \subsection{Architecture Overview}
 
-\begin{figure}[tp!]
-\includegraphics[width=0.7\textwidth]{./graphics/Figure1_1.png}
+\begin{figure}[bp!]
+\includegraphics[width=0.7\textwidth]{./graphics/Figure1.png}
 \centering
 \caption{LHCb job troughput by site}
 \label{fig:Job-throughput}
 \end{figure}
 \begin{figure}[tp!]
-\includegraphics[width=0.7\textwidth]{./graphics/Figure1_2.png}
+\includegraphics[width=0.7\textwidth]{./graphics/Figure2.png}
 \centering
 \caption{LHCb data transfers throughput}
 \label{fig:Data-transfers}
@@ -238,8 +238,8 @@ agents repeat the same logic in each iteration cycle: they monitor the service s
  and respond by initiating actions (like job
 submission or data transfer) which update the states of various system
 entities.
-\begin{figure}[tp!]
-\includegraphics[width=0.5\textwidth] {./graphics/Figure1.png}
+\begin{figure}[bp!]
+\includegraphics[width=0.5\textwidth] {./graphics/Figure3.png}
 \centering
 \caption{DIRAC Architecture overview}
 \label{fig:DIRAC-Arch}
@@ -272,7 +272,7 @@ The driving force of DIRAC is the Workload Management System (WMS). Taking into
 account the heterogeneous, dynamic, and high-latency nature of the distributed computing environment, a
 \textit{Pilot Job paradigm}, illustrated in Fig.~\ref{fig:DIRAC-WMS}, 
 \begin{figure}[bp]
-\includegraphics[width=0.7\textwidth]{./graphics/Figure2.png}
+\includegraphics[width=0.7\textwidth]{./graphics/Figure4.png}
 \centering
 \caption{DIRAC Workload Management System \cite{DIRAC_pilot_WMS}}
 \label{fig:DIRAC-WMS}
@@ -303,7 +303,7 @@ job description is placed in the DIRAC job repository (the Job DB). Before jobs
 become eligible for execution, a chain of optimizer agents checks and prioritizes
 them in queues, utilizing the parameters information from the Job DB.
 \begin{figure}[tp]
-\includegraphics[width=0.7\linewidth,keepaspectratio=true]{./graphics/Figure3.png}
+\includegraphics[width=0.7\linewidth,keepaspectratio=true]{./graphics/Figure5.png}
 \centering
 \caption{Job state machine \cite{ProductionShifterGuide}}
 \label{fig:DIRAC-job-state-machine}
@@ -358,13 +358,13 @@ table. Other auxiliary tables maintain the relationship between these entities.
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.98\linewidth]{./graphics/Figure4.png}
+  \includegraphics[width=0.98\linewidth]{./graphics/Figure6.png}
   \caption{DIRAC Storage Management System}
   \label{fig:DIRAC-SMS}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.95\linewidth]{./graphics/SMS_CacheReplicasSM.png}
+  \includegraphics[width=0.95\linewidth]{./graphics/Figure7.png}
   \caption{CacheReplicas state machine}
   \label{fig:CacheReplicas-SM}
 \end{minipage}
@@ -515,7 +515,7 @@ for the intended analysis. In that sense, a model is an abstraction from reality
 where certain implementation details are ignored.
 
 Abstraction aims at reducing
-the program's state space in order to overcome the resource limitations \cite{Pelánek08fightingstate} encountered during model-checking. 
+the program's state space in order to overcome the resource limitations \cite{Pelanek08fightingstate} encountered during model-checking. 
 Furthermore, specification languages describe \textit{what} is being done, 
 abstracting away from the details of \textit{how} things are done. 
 Then, the ultimate question is: \textit{how do we establish correspondence between model and code?}
@@ -640,7 +640,7 @@ the storage where it resides, its full path, checksum, timestamps, etc., as can 
 from the table description in Fig.~\ref{fig:CacheReplicasTable}.
 \begin{figure}[bp!]
 \begin{center}
- \includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure5.png}
+ \includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure8.png}
 \end{center}
 \caption{CacheReplicas table description}
 \label{fig:CacheReplicasTable}
@@ -815,9 +815,9 @@ since the state space typically grows exponentially with the number of parallel 
 \subsection{Simulation and debugging}
 \begin{figure*}[tp!]
   \centering
-  \subfloat[Logging info of a DIRAC job]{\label{fig:Job-Logging-Info}\includegraphics[width=0.4566\linewidth]{./graphics/Figure6a.png}}    
+  \subfloat[Logging info of a DIRAC job]{\label{fig:Job-Logging-Info}\includegraphics[width=0.4566\linewidth]{./graphics/Figure9a.png}}    
   \hfill
-  \subfloat[XSim simulator trace]{\label{fig:simulator}\includegraphics[width =0.5\linewidth]{./graphics/Figure6b.png}}
+  \subfloat[XSim simulator trace]{\label{fig:simulator}\includegraphics[width =0.5\linewidth]{./graphics/Figure9b.png}}
   \caption{Invalid job state transitions}
   \label{fig:Simulator-job-trace}
 \vspace{-8 pt}
@@ -858,7 +858,7 @@ was visualized with DiaGraphica. Fig.~\ref{fig:DiaGraphica} shows a projection (
 on the CacheReplicas memory process, which resulted in only 6 interesting states for this process alone.
 \begin{figure}[tp]
 \vspace{-10 pt}
-\includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure7_new.png}
+\includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure10.png}
 \centering
 \caption{CacheReplicaMem process visualization with DiaGraphica}
 \label{fig:DiaGraphica}
@@ -878,7 +878,7 @@ A proper state machine implementation
 instead of hardcoding states in SQL queries can prevent such bugs.
 \begin{figure}[tp!]
 \vspace{-10 pt}
-\includegraphics[width=0.57\linewidth,keepaspectratio=true]{./graphics/Figure8.png}
+\includegraphics[width=0.57\linewidth,keepaspectratio=true]{./graphics/Figure11.png}
 \centering
 \caption{State-space visualisation of the SMS with ltsview}
 \label{fig:LTSviewVisualisation}
@@ -967,7 +967,7 @@ matching $A$ has occurred.
 \end{enumerate}
 
 \begin{figure}[tp]
-\includegraphics[width=0.7\linewidth,keepaspectratio=true]{./graphics/Figure9.png}
+\includegraphics[width=0.7\linewidth,keepaspectratio=true]{./graphics/Figure12.png}
 %was PropertyViolation1.png
 \centering
 \caption{Violation of requirements 1 (top) and 2 (bottom)}
@@ -1039,7 +1039,7 @@ $ \\ $
 
 The automaton of the concrete monitor instance which accepts requirement 3 trace is shown in Fig.~\ref{fig:monitorProcess}. 
 \begin{figure}[tp]
-\includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure10.png}
+\includegraphics[width=0.5\linewidth,keepaspectratio=true]{./graphics/Figure13.png}
 \centering
 \caption{Monitor automaton for requirement 3}
 \label{fig:monitorProcess}
@@ -1050,8 +1050,8 @@ The silent step (${\tau}$) can be executed as a result of any non-relevant syste
 from the perspective of the automaton. As soon as the system changes the state of the job further
 to ``Running'', the automaton makes a move in a similar fashion, after which point the action 
 \textit{error} is executed, and can be detected by the LTSmin tool. 
-\begin{figure}[bp]
-\includegraphics[width=0.6\linewidth,keepaspectratio=true]{./graphics/Figure11.png}
+\begin{figure}[tp]
+\includegraphics[width=0.6\linewidth,keepaspectratio=true]{./graphics/Figure14.png}
 \centering
 \caption{"Zombie" job starts running after being killed}
 \label{fig:zombieJob}
@@ -1083,7 +1083,7 @@ they place on the storage, in addition to eliminating race conditions.
 
 %TODO: fix the model, show a fixed trace
 \begin{figure}[tp]
-\includegraphics[width=0.6\linewidth,keepaspectratio=true]{./graphics/Figure12.png}
+\includegraphics[width=0.6\linewidth,keepaspectratio=true]{./graphics/Figure15.png}
 \centering
 \caption{ Race condition involving the stager callback no longer occurs}
 \label{fig:zombieJobFix}

@@ -3,7 +3,7 @@ A list of changes for the raised points:
 -------------
 * [Introduction clearly describes one of the main interests of the paper: a methodology for building models (in the model-checking sense) for a legacy system. On the other hands, it fails to introduce the second contribution of the paper, which is a methodology to actually performing the check...]
 
-> Introduction has been modified to introduce these aspects, paragraph:
+> Introduction has been extended, paragraph:
 [Once the model is in place, the toolset can automatically check for general system properties, such as deadlocks. We show how to formulate and check application-specific properties... 
 This idea is simple but flexible and generic enough to describe many temporal properties of concurrent systems.]
 -------------
@@ -26,7 +26,7 @@ This idea is simple but flexible and generic enough to describe many temporal pr
 > Related work was addressed by all reviewers, so we dedicated a separate Section 5 for this.
 
 * [Section 4 is also very pedagogical: it follows the real-world checking process, including preliminary visualization. However, figures 7 should be provided with a better resolution and better explained ... Figure 8 should probably printed in color, or entirely removed. If kept, the "suspicious transition" should be pointed in the figure.]
-> Figure 7 (now 10) is now with a better resolution (background circles simply indicate which portion of the entire state space belongs to this self-transitions. We found it un-necessary to bother the reader with this detail). Figure 8 (now 11): suspicious transition is clearly pointed at, now.
+> Figure 7 (now Figure 10) is now with a better resolution (background circles are removed. They simply indicate which portion of the entire state space belongs to this self-transitions. We found it un-necessary to bother the reader with this detail). Figure 8 (now Figure 11): suspicious transition is clearly marked now.
 -------------
 * [Section 4.3 demonstrates the efficiency of the approach, on the smallest of the two state machine. On the other hand, the approach fails on the WMS, due to combinatorial explosion.  The strategy to cope with this issue is presented as a "trick", and should be better related to the relevant concepts in the literature, in particular to testing.]
 > We briefly relate this in Section 5. Related Work [This component resembles our monitoring process automaton used to cope with state space explosion during model checking of DIRAC’s WMS system]
@@ -35,13 +35,12 @@ This idea is simple but flexible and generic enough to describe many temporal pr
 > Added in Introduction: [Depending on the frequency of certain heavier data (re)processing campaigns throughout the year, the occurrence of such inconsistencies can be up to several reported cases per month..., compared to a temporary fix, like manipulating database records or restarting processes manually]
 -------------
 * [The application of model checking on DIRAC system and finding race conditions is useful. However, the extendability of this approach for other systems is not clear to me. Can these approaches be applied on other systems? What changes need to be done?]
-> We attempt to tackle this in Section 6. Conclusions. A few more lines of explanation are added in: [It is observed that many large concurrent/distributed systems are essentially parametrized, meaning that they contain components or process descriptions which are behaviorally similar...and we believe that the combination of code slicing and abstraction rules of thumb presented in Section 3 can be helpful in this direction.]
+> We attempt to tackle this in Section 6. Conclusions. A few more lines of explanation are added: [It is observed that many large concurrent/distributed systems are essentially parametrized, meaning that they contain components or process descriptions which are behaviorally similar...and we believe that the combination of code slicing and abstraction rules of thumb presented in Section 3 can be helpful in this direction.]
 -------------
-* Reviewer #4's comments again raise the issues of applicability of the approach to other systems, and in depth discussion of related work. (covered above)
+* Reviewer #4's comments again raise the issues of applicability of the approach to other systems, and more in depth discussion of related work. (covered above)
 -------------
 * [Some discussion on the complexity and/or time requirements of using the model would be interesting to understand the usefulness of the model]
 > This is difficult to generalize for any model, but we provide statistics on the state space generation and model checking times in section 4.Analysis and Issues.
 
-Best regards,
-Daniela
+Best regards
 
